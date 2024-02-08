@@ -7,9 +7,9 @@ public abstract class ACompiler {
 		get;
 	}
 
-	public ACompiler(StreamReader reader) {
+	protected ACompiler(StreamReader reader) {
 		Reader = reader;
 	}
 
-	public abstract IEnumerable<Instruction> Compile();
+	public abstract IEnumerable<Instruction> Compile(int? limit);
 }

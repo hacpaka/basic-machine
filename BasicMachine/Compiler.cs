@@ -1,4 +1,6 @@
+using System.Reflection;
 using BasicMachine.Abstractions;
+using BasicMachine.Commands;
 using BasicMachine.Commands.Abstractions;
 using BasicMachine.Parsers;
 using BasicMachine.Syntax;
@@ -19,18 +21,22 @@ public class Compiler: ACompiler {
 		get;
 	} = new();
 
-	public override IEnumerable<Instruction> Compile() {
-		Collection.Clear();
-
+	public override IEnumerable<Instruction> Compile(int? limit) {
 		while (!Reader.EndOfStream) {
 			Index++;
 
-			try {
-				Line = Reader.ReadLine()!;
+			if (limit > 0 && Index >= limit) {
+				break;
+			}
 
-				if (Line.Trim().Length < 1) {
-					continue;
-				}
+			Collection.Clear();
+			Line = Reader.ReadLine()!.Trim();
+
+			if (Line.Trim().Length < 1) {
+				continue;
+			}
+
+			try {
 
 				CommandParser.Parse(Line, (_, raw) => {
 					Collection.Add(raw);
@@ -50,9 +56,24 @@ public class Compiler: ACompiler {
 			Instruction instruction = new(address);
 			foreach (string raw in Collection.Skip(1)) {
 
+				object[] arguments = { raw, new Nop() };
 				foreach (Type type in types) {
 
+					if ((bool)type.GetMethod("TryToCompile",
+						BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static)!
+
+							.MakeGenericMethod(type)
+							.Invoke(null, arguments)!) {
+
+						break;
+					}
 				}
+
+				if (arguments[1] is Nop) {
+					throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
+				}
+
+				instruction.Commands.Add((ACommand)arguments[1]);
 			}
 
 			yield return instruction;

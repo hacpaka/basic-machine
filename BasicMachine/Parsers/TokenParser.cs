@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace BasicMachine.Parsers;
 
 public static class TokenParser {
-	public static bool Parse(string pattern, ref string line) {
+	public static bool Parse(Regex parser, ref string line) {
 
 		if (line.Trim().Length < 1) {
 			throw new Exception("Nothing to parse!");
@@ -11,7 +11,7 @@ public static class TokenParser {
 
 		int count = 0;
 
-		line = Regex.Replace(pattern, line, _ => {
+		line = parser.Replace(line, _ => {
 			count++;
 			return "";
 		});

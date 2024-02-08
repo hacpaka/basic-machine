@@ -1,23 +1,22 @@
-using System.Reflection;
+using System.Text.RegularExpressions;
 using BasicMachine.Parsers;
 
 namespace BasicMachine.Commands.Abstractions;
 
 public abstract class ACommand {
-	private string Source {
+	private List<string> Arguments {
 		get;
-	}
+	} = new();
 
-	protected ACommand(string? source) {
-		Source = source!;
-	}
+	public static bool TryToCompile<T>(string raw, ref ACommand command) where T: ACommand, new() {
+		if (!TokenParser.Parse(new Regex($"^{typeof(T).Name}", RegexOptions.IgnoreCase), ref raw)) {
+			return false;
+		}
 
+		command = new T();
+		command.Arguments.Add(raw);
 
-	public static bool TryToCompile(string raw, out ACommand command) {
-		Console.WriteLine($">>>>>>>>> {MethodBase.GetCurrentMethod()!.DeclaringType}");
-		// if (!TokenParser.Parse($"^{typ}"))
-		command = new Nop();
-		return false;
+		return true;
 	}
 
 	public abstract void Execute();

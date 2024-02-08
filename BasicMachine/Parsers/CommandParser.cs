@@ -13,7 +13,8 @@ public static class CommandParser {
 			Console.WriteLine($"=> {line}");
 		}
 
-		if (!RegexParser.Parse(new Regex(@"^\s*([0-9]+)\s+(?:((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
+		// if (!RegexParser.Parse(new Regex(@"^\s*([0-9]+)\s+(?:((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
+		if (!RegexParser.Parse(new Regex(@"^\s*([0-9]+)\s+(?:(REM\s+.*)|((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
 				(i, matches) => {
 
 					foreach (string match in matches) {

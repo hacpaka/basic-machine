@@ -2,7 +2,7 @@ using BasicMachine.Commands.Abstractions;
 
 namespace BasicMachine.Commands;
 
-public class Nop: ACommand {
+public class Rem: ACommand {
 	public override void Execute() {
 
 	}
