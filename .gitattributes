@@ -1,0 +1,26 @@
+# Autodetect text files
+* text=auto
+
+*.cs eol=lf
+*.sln eol=lf
+*.sln.DotSettings eol=lf
+*.csproj eol=lf
+*.json eol=lf
+*.bas eol=lf
+*.txt eol=lf
+*.md eol=lf
+*.xml eol=lf
+*.yml eol=lf
+*.sh eol=lf
+
+.env* eol=lf
+
+LICENSE eol=lf
+README eol=lf
+CHANGELOG eol=lf
+.editorconfig eol=lf
+
+.gitattributes eol=lf
+.gitmodules eol=lf
+.gitignore eol=lf
+
