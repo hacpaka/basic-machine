@@ -53,8 +53,12 @@ public class Compiler: ACompiler {
 		}
 	}
 
-	private AExecutable? TryToCompileStatement(string raw) {
-		return null;
+	private AExecutable TryToCompileStatement(string raw) {
+		if (!Statement.TryToCompile(raw, out Statement? statement)) {
+			return null;
+		}
+
+		return statement!;
 	}
 
 	private ACommand TryCompileCommand(string raw) {

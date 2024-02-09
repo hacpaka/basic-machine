@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace BasicMachine.Parsers;
 
-public static class CommandParser {
+public static class StatementParser {
 	public static void Parse(string line, Action<int, string> handler, bool debug = false) {
 
 		if (line.Trim().Length < 1) {
@@ -13,7 +13,7 @@ public static class CommandParser {
 			Console.WriteLine($"=> {line}");
 		}
 
-		if (!RegexParser.Parse(new Regex(@"^([0-9]+)\s+(?:(REM\s+.*)|((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
+		if (!RegexParser.Parse(new Regex(@"^([a-z0-9]+)((?:[$%]|\((?:[a-z0-9]+,?)+\)))?\s*=\s*(.+)$", RegexOptions.IgnoreCase), line,
 				(i, matches) => {
 
 					foreach (string match in matches) {
