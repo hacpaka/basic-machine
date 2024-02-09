@@ -3,15 +3,14 @@ using BasicMachine.Syntax.Lexemes.Abstractions;
 namespace BasicMachine.Syntax;
 
 public class Instruction {
-	public List<AExecutable> Commands {
-		get;
-	} = new();
+	private readonly List<AExecutable> commands = new();
 
 	public int Address {
 		get; private set;
 	}
 
-	public Instruction(int address) {
+	public Instruction(int address, Action<List<AExecutable>> handler) {
 		Address = address;
+		handler.Invoke(commands);
 	}
 }
