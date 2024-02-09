@@ -1,5 +1,5 @@
-using BasicMachine.Commands.Abstractions;
 using BasicMachine.Syntax;
+using BasicMachine.Syntax.Lexemes.Abstractions;
 
 namespace BasicMachine;
 

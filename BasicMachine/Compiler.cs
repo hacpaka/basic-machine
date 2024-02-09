@@ -1,9 +1,9 @@
 using System.Reflection;
 using BasicMachine.Abstractions;
-using BasicMachine.Commands;
-using BasicMachine.Commands.Abstractions;
 using BasicMachine.Parsers;
 using BasicMachine.Syntax;
+using BasicMachine.Syntax.Lexemes;
+using BasicMachine.Syntax.Lexemes.Abstractions;
 
 namespace BasicMachine;
 
@@ -30,19 +30,31 @@ public class Compiler: ACompiler {
 			}
 
 			Instruction instruction = new(address);
-
 			foreach (string raw in Collection.Skip(1)) {
-				ACommand command = TryCompileCommand(raw);
 
-				if (command is Nop) {
-					throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
+				ACommand command = TryCompileCommand(raw);
+				if (command is not Nop) {
+
+					instruction.Commands.Add(command);
+					continue;
 				}
 
-				instruction.Commands.Add(command);
+				AExecutable? statement = TryToCompileStatement(raw);
+				if (statement != null) {
+
+					instruction.Commands.Add(statement);
+					continue;
+				}
+
+				throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
 			}
 
 			yield return instruction;
 		}
+	}
+
+	private AExecutable? TryToCompileStatement(string raw) {
+		return null;
 	}
 
 	private ACommand TryCompileCommand(string raw) {

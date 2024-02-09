@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using BasicMachine.Parsers;
 
-namespace BasicMachine.Commands.Abstractions;
+namespace BasicMachine.Syntax.Lexemes.Abstractions;
 
 public abstract class ACommand: AExecutable {
 	private List<string> Arguments {
