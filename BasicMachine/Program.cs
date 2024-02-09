@@ -32,7 +32,7 @@ internal class Options {
 	}
 }
 
-internal static class Interpreter {
+internal static class Program {
 	private static Machine Machine {
 		get;
 	} = new();
@@ -61,8 +61,8 @@ internal static class Interpreter {
 					throw new Exception($"Invalid target: {o.Target}");
 				}
 
-				Limit = o.Limit;
 				Target = o.Target;
+				Limit = o.Limit;
 				Trace = o.Trace;
 				Debug = o.Debug;
 			});
@@ -73,7 +73,16 @@ internal static class Interpreter {
 
 		try {
 
-			foreach (Instruction instruction in compiler.Compile(Limit)) {
+			foreach (Instruction instruction in compiler.Compile()) {
+				if (Limit > 0 && compiler.Index >= Limit) {
+
+					if (Trace) {
+						Console.WriteLine("Terminated because of limit reached!");
+					}
+
+					break;
+				}
+
 				Machine.Register(instruction);
 			}
 

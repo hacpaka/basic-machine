@@ -3,7 +3,7 @@ using BasicMachine.Parsers;
 
 namespace BasicMachine.Commands.Abstractions;
 
-public abstract class ACommand {
+public abstract class ACommand: AExecutable {
 	private List<string> Arguments {
 		get;
 	} = new();
@@ -19,5 +19,4 @@ public abstract class ACommand {
 		return true;
 	}
 
-	public abstract void Execute();
 }

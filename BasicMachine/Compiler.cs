@@ -8,42 +8,18 @@ using BasicMachine.Syntax;
 namespace BasicMachine;
 
 public class Compiler: ACompiler {
-	public int Index {
-		get; private set;
-	}
-
-	public string Line {
-		get;
-		private set;
-	} = "";
 
 	public List<string> Collection {
 		get;
 	} = new();
 
-	public override IEnumerable<Instruction> Compile(int? limit) {
-		while (!Reader.EndOfStream) {
-			Index++;
-
-			if (limit > 0 && Index >= limit) {
-				break;
-			}
-
+	public override IEnumerable<Instruction> Compile() {
+		while (Read()) {
 			Collection.Clear();
-			Line = Reader.ReadLine()!.Trim();
 
-			if (Line.Trim().Length < 1) {
-				continue;
-			}
-
-			try {
-
-				CommandParser.Parse(Line, (_, raw) => {
-					Collection.Add(raw);
-				});
-			} catch (Exception e) {
-				Console.WriteLine($"Parsing error in line {Index}: {e.Message}");
-			}
+			CommandParser.Parse(Line, (_, raw) => {
+				Collection.Add(raw);
+			});
 
 			if (Collection.Count < 1) {
 				continue;
@@ -54,30 +30,36 @@ public class Compiler: ACompiler {
 			}
 
 			Instruction instruction = new(address);
+
 			foreach (string raw in Collection.Skip(1)) {
+				ACommand command = TryCompileCommand(raw);
 
-				object[] arguments = { raw, new Nop() };
-				foreach (Type type in types) {
-
-					if ((bool)type.GetMethod("TryToCompile",
-						BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static)!
-
-							.MakeGenericMethod(type)
-							.Invoke(null, arguments)!) {
-
-						break;
-					}
-				}
-
-				if (arguments[1] is Nop) {
+				if (command is Nop) {
 					throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
 				}
 
-				instruction.Commands.Add((ACommand)arguments[1]);
+				instruction.Commands.Add(command);
 			}
 
 			yield return instruction;
 		}
+	}
+
+	private ACommand TryCompileCommand(string raw) {
+		object[] args = { raw, new Nop() };
+
+		foreach (Type type in types) {
+			if ((bool)type.GetMethod("TryToCompile",
+					BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Static)!
+
+				.MakeGenericMethod(type)
+				.Invoke(null, args)!) {
+
+				break;
+			}
+		}
+
+		return (args[1] as ACommand)!;
 	}
 
 	private readonly List<Type> types = new ();
