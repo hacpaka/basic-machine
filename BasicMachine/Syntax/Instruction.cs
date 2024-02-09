@@ -13,4 +13,13 @@ public class Instruction {
 		Address = address;
 		handler.Invoke(commands);
 	}
+
+	public void Execute() {
+		Console.WriteLine($"=> {GetType().Name}");
+
+		foreach (AExecutable command in commands) {
+			Console.WriteLine($"==> {command.GetType().Name}");
+			command.Execute();
+		}
+	}
 }

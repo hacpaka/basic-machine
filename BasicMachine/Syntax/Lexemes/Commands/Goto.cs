@@ -4,6 +4,6 @@ namespace BasicMachine.Syntax.Lexemes.Commands;
 
 public class Goto: ACommand {
 	public override void Execute() {
-
+		throw new NotImplementedException();
 	}
 }

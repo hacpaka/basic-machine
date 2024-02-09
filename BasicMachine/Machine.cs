@@ -1,5 +1,4 @@
 using BasicMachine.Syntax;
-using BasicMachine.Syntax.Lexemes.Abstractions;
 
 namespace BasicMachine;
 
@@ -12,5 +11,17 @@ public class Machine {
 
 	public void Run() {
 		Console.WriteLine("Machine is running!");
+
+		List<int> flow = instructions.Keys.ToList();
+		flow.Sort();
+
+		int count = 0;
+		foreach (int index in flow) {
+			instructions[index].Execute();
+
+			if (++count > 100) {
+				break;
+			}
+		}
 	}
 }

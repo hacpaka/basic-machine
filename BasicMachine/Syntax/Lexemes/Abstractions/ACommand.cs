@@ -4,9 +4,7 @@ using BasicMachine.Parsers;
 namespace BasicMachine.Syntax.Lexemes.Abstractions;
 
 public abstract class ACommand: AExecutable {
-	private List<string> Arguments {
-		get;
-	} = new();
+	protected readonly List<string> Arguments = new();
 
 	public static bool TryToCompile<T>(string raw, ref ACommand command) where T: ACommand, new() {
 		if (!TokenParser.Parse(new Regex($"^{typeof(T).Name}", RegexOptions.IgnoreCase), ref raw)) {
@@ -14,7 +12,10 @@ public abstract class ACommand: AExecutable {
 		}
 
 		command = new T();
-		command.Arguments.Add(raw);
+
+		if (raw.Length > 0) {
+			command.Arguments.Add(raw);
+		}
 
 		return true;
 	}

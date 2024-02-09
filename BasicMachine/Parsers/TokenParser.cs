@@ -14,7 +14,12 @@ public static class TokenParser {
 		line = parser.Replace(line, _ => {
 			count++;
 			return "";
-		});
+		})
+			/*
+			 * The extra whitespace characters are insignificant
+			 * for BASIC syntax and should be removed.
+			 */
+			.Trim();
 
 		return count > 0;
 	}
