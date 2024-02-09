@@ -4,6 +4,7 @@ using BasicMachine.Parsers;
 using BasicMachine.Syntax;
 using BasicMachine.Syntax.Lexemes;
 using BasicMachine.Syntax.Lexemes.Abstractions;
+using BasicMachine.Syntax.Lexemes.Commands;
 
 namespace BasicMachine;
 
@@ -29,27 +30,26 @@ public class Compiler: ACompiler {
 				throw new Exception($"Invalid address: {address}!");
 			}
 
-			Instruction instruction = new(address);
-			foreach (string raw in Collection.Skip(1)) {
+			yield return new Instruction(address, commands => {
+				foreach (string raw in Collection.Skip(1)) {
 
-				ACommand command = TryCompileCommand(raw);
-				if (command is not Nop) {
+					ACommand command = TryCompileCommand(raw);
+					if (command is not Nop) {
 
-					instruction.Commands.Add(command);
-					continue;
+						commands.Add(command);
+						continue;
+					}
+
+					AExecutable? statement = TryToCompileStatement(raw);
+					if (statement != null) {
+
+						commands.Add(statement);
+						continue;
+					}
+
+					throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
 				}
-
-				AExecutable? statement = TryToCompileStatement(raw);
-				if (statement != null) {
-
-					instruction.Commands.Add(statement);
-					continue;
-				}
-
-				throw new Exception($"Undefined command: {string.Concat(raw.Take(12))}...");
-			}
-
-			yield return instruction;
+			});
 		}
 	}
 

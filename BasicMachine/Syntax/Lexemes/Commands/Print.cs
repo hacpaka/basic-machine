@@ -1,8 +1,8 @@
 using BasicMachine.Syntax.Lexemes.Abstractions;
 
-namespace BasicMachine.Syntax.Lexemes;
+namespace BasicMachine.Syntax.Lexemes.Commands;
 
-public class Rem: ACommand {
+public class Print: ACommand {
 	public override void Execute() {
 
 	}

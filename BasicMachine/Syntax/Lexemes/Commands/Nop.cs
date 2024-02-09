@@ -1,8 +1,8 @@
 using BasicMachine.Syntax.Lexemes.Abstractions;
 
-namespace BasicMachine.Syntax.Lexemes;
+namespace BasicMachine.Syntax.Lexemes.Commands;
 
-public class Dim: ACommand {
+public class Nop: ACommand {
 	public override void Execute() {
 
 	}
