@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using BasicMachine.Helpers;
 
 namespace BasicMachine.Parsers;
 

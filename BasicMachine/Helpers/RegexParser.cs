@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BasicMachine.Parsers;
+namespace BasicMachine.Helpers;
 
 public static class RegexParser {
 	public static bool Parse(Regex pattern, string target, Action<int, string> handler) {
