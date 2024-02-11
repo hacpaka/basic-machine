@@ -3,26 +3,15 @@ using System.Text.RegularExpressions;
 namespace BasicMachine.Parsers;
 
 public static class CommandParser {
-	public static void Parse(string line, Action<int, string> handler, bool debug = false) {
+	public static void Parse(string line, Action<int, string> handler) {
 
 		if (line.Trim().Length < 1) {
 			throw new Exception("Nothing to parse!");
 		}
 
-		if (debug) {
-			Console.WriteLine($"=> {line}");
-		}
-
 		if (!RegexParser.Parse(new Regex(@"^([0-9]+)\s+(?:(REM\s+.*)|((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
 				(i, matches) => {
-
-					foreach (string match in matches) {
-						handler.Invoke(i, match);
-
-						if (debug) {
-							Console.WriteLine($"-> {i}: {match}");
-						}
-					}
+					handler.Invoke(i, matches);
 				})) {
 
 			/*

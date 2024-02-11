@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace BasicMachine.Parsers;
 
 public static class RegexParser {
-	public static bool Parse(Regex pattern, string target, Action<int, List<string>> handler, bool ignorePrimaryGroup = true) {
+	public static bool Parse(Regex pattern, string target, Action<int, string> handler) {
 		Match result = pattern.Match(target);
 
 		if (!result.Success) {
@@ -20,11 +20,13 @@ public static class RegexParser {
 			 * The primary matching group should be ignored if we want to return only subpatterns.
 			 * Such behavior is expected in most of the cases.
 			 */
-			if (i < 1 && ignorePrimaryGroup) {
+			if (i < 1) {
 				continue;
 			}
 
-			handler(i, result.Groups[i].Captures.Select(v => v.Value).ToList());
+			foreach (string match in result.Groups[i].Captures.Select(v => v.Value).ToList()) {
+				handler.Invoke(i, match);
+			}
 		}
 
 		return true;
