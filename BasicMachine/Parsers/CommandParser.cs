@@ -10,7 +10,7 @@ public static class CommandParser {
 			throw new Exception("Nothing to parse!");
 		}
 
-		if (!RegexParser.Parse(new Regex(@"^([0-9]+)\s+(?:(REM\s+.*)|((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
+		if (!Finder.Find(new Regex(@"^([0-9]+)\s+(?:(REM\s+.*)|((?:""[^""]*""|[^:""]+)+):?)+$", RegexOptions.IgnoreCase), line,
 				(i, matches) => {
 					handler.Invoke(i, matches);
 				})) {

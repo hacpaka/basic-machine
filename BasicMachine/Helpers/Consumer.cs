@@ -2,8 +2,8 @@ using System.Text.RegularExpressions;
 
 namespace BasicMachine.Parsers;
 
-public static class TokenParser {
-	public static bool Parse(Regex parser, ref string line) {
+public static class Consumer {
+	public static bool Consume(Regex parser, ref string line) {
 
 		if (line.Trim().Length < 1) {
 			throw new Exception("Nothing to parse!");
@@ -16,8 +16,8 @@ public static class TokenParser {
 			return "";
 		})
 			/*
-			 * The extra whitespace characters are insignificant
-			 * for BASIC syntax and should be removed.
+			 * The extra whitespace characters are insignificant for BASIC syntax
+			 * and should be removed.
 			 */
 			.Trim();
 

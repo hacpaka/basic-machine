@@ -10,7 +10,7 @@ public static class StatementParser {
 			throw new Exception("Nothing to parse!");
 		}
 
-		if (!RegexParser.Parse(new Regex(@"^([a-z0-9]+)((?:[$%]|\((?:[a-z0-9]+,?)+\)))?\s*=\s*(.+)$", RegexOptions.IgnoreCase), line,
+		if (!Finder.Find(new Regex(@"^([a-z0-9]+)((?:[$%]|\((?:[a-z0-9]+,?)+\)))?\s*=\s*(.+)$", RegexOptions.IgnoreCase), line,
 				(i, matches) => {
 					handler.Invoke(i, matches);
 				})) {
