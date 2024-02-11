@@ -3,8 +3,8 @@ using System.Text.RegularExpressions;
 namespace BasicMachine.Parsers;
 
 public static class RegexParser {
-	public static bool Parse(Regex parser, string target, Action<int, List<string>> handler, bool ignorePrimaryGroup = true) {
-		Match result = parser.Match(target);
+	public static bool Parse(Regex pattern, string target, Action<int, List<string>> handler, bool ignorePrimaryGroup = true) {
+		Match result = pattern.Match(target);
 
 		if (!result.Success) {
 			return false;

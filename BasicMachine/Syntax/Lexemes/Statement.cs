@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using BasicMachine.Parsers;
 using BasicMachine.Syntax.Lexemes.Abstractions;
 
@@ -9,8 +10,9 @@ public class Statement: AExecutable {
 		throw new NotImplementedException();
 	}
 
-	public Statement(List<string> parsed) {
-
+	public Statement(IEnumerable<string> parsed) {
+		Console.WriteLine($">>>>> {string.Join(" ", parsed)}");
+		throw new Exception("Undone!");
 	}
 
 	public static bool TryToCompile(string raw, out Statement? statement) {
